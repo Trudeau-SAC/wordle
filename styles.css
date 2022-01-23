@@ -1,0 +1,217 @@
+/* Variables */
+:root {
+  --bg-color: #fdf8f2;
+  --primary-color: #8783c2;
+  --correct-position-color: #ccf7cb;
+  --incorrect-position-color: #f7f2cb;
+  --incorrect-color: rgba(185, 182, 229, 0.7);
+}
+
+/* Font */
+@font-face {
+  font-family: 'Satoshi-Variable';
+  src: url('../fonts/Satoshi-Variable.woff2') format('woff2'),
+    url('../fonts/Satoshi-Variable.woff') format('woff'),
+    url('../fonts/Satoshi-Variable.ttf') format('truetype');
+  font-weight: 300 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi-VariableItalic';
+  src: url('../fonts/Satoshi-VariableItalic.woff2') format('woff2'),
+    url('../fonts/Satoshi-VariableItalic.woff') format('woff'),
+    url('../fonts/Satoshi-VariableItalic.ttf') format('truetype');
+  font-weight: 300 900;
+  font-display: swap;
+  font-style: italic;
+}
+
+/* Reset and Overall */
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+html {
+  font-size: 62.5%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Satoshi-Variable', sans-serif;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  background-color: var(--bg-color);
+  transition: background-color;
+  text-align: center;
+}
+
+.container {
+  position: relative;
+  height: 100vh;
+  padding-top: 15vh;
+  padding-bottom: 2vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 2rem;
+}
+
+.header {
+  position: relative;
+  height: min-content;
+}
+
+.title {
+  font-size: 7.2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  text-transform: lowercase;
+  line-height: 1;
+  animation: title 3s infinite;
+}
+
+@keyframes title {
+  0% {
+    font-weight: 900;
+  }
+
+  50% {
+    font-weight: 600;
+  }
+
+  100% {
+    font-weight: 900;
+  }
+}
+
+.heart {
+  position: absolute;
+  top: -2.3rem;
+  left: 50%;
+  z-index: -1;
+  transform: scale(1.3) translateX(6vh);
+  animation: heart 3s infinite;
+}
+
+@keyframes heart {
+  0% {
+    transform: scale(1.3) translateX(6vh);
+  }
+
+  50% {
+    transform: scale(1.5) translateX(5vh);
+  }
+
+  100% {
+    transform: scale(1.3) translateX(6vh);
+  }
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  margin: auto;
+}
+
+.grid__row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+}
+
+.grid__tile {
+  background-color: var(--bg-color);
+  border: 0.25rem solid #b9b6e5;
+  border-radius: 0.3rem;
+  width: min(calc(60 / 390 * 100vw), 6.4rem);
+  height: min(calc(60 / 390 * 100vw), 6.4rem);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.grid__tile--incorrect {
+  background-color: var(--incorrect-color);
+}
+
+.grid__tile--incorrect-position {
+  background-color: var(--incorrect-position-color);
+}
+
+.grid__tile--correct-position {
+  background-color: var(--correct-position-color);
+}
+
+.grid__letter {
+  font-size: 3.2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  transform: translateY(-0.1rem);
+}
+
+.keyboard {
+  margin: auto;
+}
+
+.keyboard__row {
+  display: grid;
+  gap: 0.2rem;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.keyboard__row:not(:last-of-type) {
+  margin-bottom: 0.2rem;
+}
+
+.keyboard__row:nth-of-type(1) {
+  grid-template-columns: repeat(10, 1fr);
+}
+
+.keyboard__row:nth-of-type(2) {
+  grid-template-columns: repeat(9, 1fr);
+}
+
+.keyboard__row:nth-of-type(3) {
+  grid-template-columns: 1.5fr repeat(7, 1fr) 1.5fr;
+}
+
+.keyboard__key {
+  display: inline-flex;
+  background-color: var(--bg-color);
+  border: 0.25rem solid #b9b6e5;
+  border-radius: 0.3rem;
+  width: min(calc(34 / 390 * 100vw), 4rem);
+  height: min(calc(60 / 390 * 100vw), 6.4rem);
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.keyboard__key--max-width {
+  width: 100%;
+}
+
+.keyboard__letter {
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--primary-color);
+  transform: translateY(-0.1rem);
+}
+
+@media (max-height: 750px) {
+  .container {
+    padding-top: 6vh;
+  }
+}
