@@ -5,199 +5,276 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Love Week Wordle</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="css/styles.css" />
     <link rel="icon" type="image/x-icon" href="/img/favicon.svg" />
-    <script src="fittext.js"></script>
-    <script src="scripts.js"></script>
   </head>
-  <body oncontextmenu="return false">
+  <!-- <body oncontextmenu="return false"> -->
+  <body>
+    <div class="modal modal--instructions">
+      <div class="modal__content">
+        <img src="img/close.svg" class="modal__close" />
+        <h2 class="modal__title">How to play</h2>
+        <p class="modal__text">
+          welcome to love week 2022! hopefully i get a girlfriend this year! lmk
+          if you’re interested :)
+        </p>
+        <p class="modal__text">
+          You will have 6 guesses to find the 5 letter word. Each guess has to
+          be a valid word.
+        </p>
+        <p class="modal__text">Hit the enter button to submit.</p>
+        <p class="modal__text">
+          After each guess, the color of the tiles will change to show how close
+          your guess was to the word.
+        </p>
+        <p class="modal__text modal__text--bold">Example</p>
+        <div class="modal__example-grid">
+          <div class="grid__tile grid__tile--small grid__tile--incorrect">
+            <p class="grid__letter grid__letter--small">a</p>
+          </div>
+          <div
+            class="grid__tile grid__tile--small grid__tile--correct-position"
+          >
+            <p class="grid__letter grid__letter--small">t</p>
+          </div>
+          <div
+            class="grid__tile grid__tile--small grid__tile--incorrect-position"
+          >
+            <p class="grid__letter grid__letter--small">e</p>
+          </div>
+          <div
+            class="grid__tile grid__tile--small grid__tile--incorrect-position"
+          >
+            <p class="grid__letter grid__letter--small">e</p>
+          </div>
+          <div class="grid__tile grid__tile--small grid__tile--incorrect">
+            <p class="grid__letter grid__letter--small">z</p>
+          </div>
+        </div>
+        <p class="modal__text">
+          <span class="modal__text--bold">t</span> is in the word and in the
+          correct spot, <span class="modal__text--bold">e</span> is in the word
+          but in the wrong spot, and <span class="modal__text--bold">a</span>,
+          <span class="modal__text--bold">z</span> are not in the word at any
+          spot.
+        </p>
+        <p class="modal__text modal__text--bold">
+          There will be a new wordle every day! Take a screenshot of each after
+          you solve it and submit it for a cool button! :)
+        </p>
+        <div class="modal__start">
+          <p class="modal__start-text">start!</p>
+        </div>
+      </div>
+    </div>
     <div class="container">
+      <div class="question">
+        <p class="question__mark">?</p>
+      </div>
       <div class="header">
-        <h1 class="title" id="title">Love Week</h1>
+        <h1 class="title">Love Week</h1>
         <img src="img/heart.svg" alt="Heart" class="heart" />
       </div>
       <div class="grid">
         <div class="grid__row">
-          <div class="grid__tile grid__tile--incorrect">
-            <p class="grid__letter">a</p>
-          </div>
-          <div class="grid__tile grid__tile--incorrect-position">
-            <p class="grid__letter">t</p>
-          </div>
-          <div class="grid__tile grid__tile--correct-position">
-            <p class="grid__letter">e</p>
+          <div class="grid__tile">
+            <p class="grid__letter"></p>
           </div>
           <div class="grid__tile">
-            <p class="grid__letter">e</p>
+            <p class="grid__letter"></p>
           </div>
           <div class="grid__tile">
-            <p class="grid__letter">z</p>
+            <p class="grid__letter"></p>
+          </div>
+          <div class="grid__tile">
+            <p class="grid__letter"></p>
+          </div>
+          <div class="grid__tile">
+            <p class="grid__letter"></p>
           </div>
         </div>
         <div class="grid__row">
           <div class="grid__tile">
-            <p class="grid__letter">a</p>
+            <p class="grid__letter"></p>
           </div>
           <div class="grid__tile">
-            <p class="grid__letter">t</p>
+            <p class="grid__letter"></p>
           </div>
           <div class="grid__tile">
-            <p class="grid__letter">e</p>
+            <p class="grid__letter"></p>
           </div>
           <div class="grid__tile">
-            <p class="grid__letter">e</p>
+            <p class="grid__letter"></p>
           </div>
           <div class="grid__tile">
-            <p class="grid__letter">z</p>
-          </div>
-        </div>
-        <div class="grid__row">
-          <div class="grid__tile">
-            <p class="grid__letter">a</p>
-          </div>
-          <div class="grid__tile">
-            <p class="grid__letter">t</p>
-          </div>
-          <div class="grid__tile">
-            <p class="grid__letter">e</p>
-          </div>
-          <div class="grid__tile">
-            <p class="grid__letter">e</p>
-          </div>
-          <div class="grid__tile">
-            <p class="grid__letter">z</p>
+            <p class="grid__letter"></p>
           </div>
         </div>
         <div class="grid__row">
           <div class="grid__tile">
-            <p class="grid__letter">a</p>
+            <p class="grid__letter"></p>
           </div>
           <div class="grid__tile">
-            <p class="grid__letter">t</p>
+            <p class="grid__letter"></p>
           </div>
           <div class="grid__tile">
-            <p class="grid__letter">e</p>
+            <p class="grid__letter"></p>
           </div>
           <div class="grid__tile">
-            <p class="grid__letter">e</p>
+            <p class="grid__letter"></p>
           </div>
           <div class="grid__tile">
-            <p class="grid__letter">z</p>
+            <p class="grid__letter"></p>
           </div>
         </div>
         <div class="grid__row">
           <div class="grid__tile">
-            <p class="grid__letter">a</p>
+            <p class="grid__letter"></p>
           </div>
           <div class="grid__tile">
-            <p class="grid__letter">t</p>
+            <p class="grid__letter"></p>
           </div>
           <div class="grid__tile">
-            <p class="grid__letter">e</p>
+            <p class="grid__letter"></p>
           </div>
           <div class="grid__tile">
-            <p class="grid__letter">e</p>
+            <p class="grid__letter"></p>
           </div>
           <div class="grid__tile">
-            <p class="grid__letter">z</p>
+            <p class="grid__letter"></p>
+          </div>
+        </div>
+        <div class="grid__row">
+          <div class="grid__tile">
+            <p class="grid__letter"></p>
+          </div>
+          <div class="grid__tile">
+            <p class="grid__letter"></p>
+          </div>
+          <div class="grid__tile">
+            <p class="grid__letter"></p>
+          </div>
+          <div class="grid__tile">
+            <p class="grid__letter"></p>
+          </div>
+          <div class="grid__tile">
+            <p class="grid__letter"></p>
+          </div>
+        </div>
+        <div class="grid__row">
+          <div class="grid__tile">
+            <p class="grid__letter"></p>
+          </div>
+          <div class="grid__tile">
+            <p class="grid__letter"></p>
+          </div>
+          <div class="grid__tile">
+            <p class="grid__letter"></p>
+          </div>
+          <div class="grid__tile">
+            <p class="grid__letter"></p>
+          </div>
+          <div class="grid__tile">
+            <p class="grid__letter"></p>
           </div>
         </div>
       </div>
       <div class="keyboard">
         <div class="keyboard__row">
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="q">
             <div class="keyboard__letter">q</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="w">
             <div class="keyboard__letter">w</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="e">
             <div class="keyboard__letter">e</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="r">
             <div class="keyboard__letter">r</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="t">
             <div class="keyboard__letter">t</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="y">
             <div class="keyboard__letter">y</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="u">
             <div class="keyboard__letter">u</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="i">
             <div class="keyboard__letter">i</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="o">
             <div class="keyboard__letter">o</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="p">
             <div class="keyboard__letter">p</div>
           </div>
         </div>
         <div class="keyboard__row">
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="a">
             <div class="keyboard__letter">a</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="s">
             <div class="keyboard__letter">s</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="d">
             <div class="keyboard__letter">d</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="f">
             <div class="keyboard__letter">f</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="g">
             <div class="keyboard__letter">g</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="h">
             <div class="keyboard__letter">h</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="j">
             <div class="keyboard__letter">j</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="k">
             <div class="keyboard__letter">k</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="l">
             <div class="keyboard__letter">l</div>
           </div>
         </div>
         <div class="keyboard__row">
-          <div class="keyboard__key keyboard__key--max-width">
+          <div class="keyboard__key keyboard__key--max-width" data-key="enter">
             <div class="keyboard__letter">enter</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="z">
             <div class="keyboard__letter">z</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="x">
             <div class="keyboard__letter">x</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="c">
             <div class="keyboard__letter">c</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="v">
             <div class="keyboard__letter">v</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="b">
             <div class="keyboard__letter">b</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="n">
             <div class="keyboard__letter">n</div>
           </div>
-          <div class="keyboard__key">
+          <div class="keyboard__key" data-key="m">
             <div class="keyboard__letter">m</div>
           </div>
-          <div class="keyboard__key keyboard__key--max-width">
+          <div
+            class="keyboard__key keyboard__key--max-width"
+            data-key="backspace"
+          >
             <div class="keyboard__letter">del</div>
           </div>
         </div>
       </div>
     </div>
   </body>
-  <script>
-    window.fitText(document.getElementById('title'), 0.5);
-  </script>
+  <script src="js/scripts.js"></script>
 </html>
