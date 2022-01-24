@@ -10,9 +10,28 @@
   </head>
   <!-- <body oncontextmenu="return false"> -->
   <body>
-    <div class="modal modal--instructions">
+    <div class="modal hidden" id="finishModal">
       <div class="modal__content">
-        <img src="img/close.svg" class="modal__close" />
+        <img src="img/close.svg" class="modal__close" id="closeResult" />
+        <h2 class="modal__title" id="result">You win!</h2>
+        <p class="modal__text" id="resultText">
+          Yay! You won! Congratulations!
+        </p>
+        <p class="modal__text">
+          There will be a new worldle every day of the week, so make sure to
+          come back for more!
+        </p>
+        <p class="modal__text">Love you and see you next time! 😘</p>
+        <p class="modal__time">time: 01:12:22</p>
+        <p class="modal__time">next wordle: 01:12:22</p>
+        <div class="modal__btn" id="shareButton">
+          <p class="modal__btn-text">share!</p>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="instructionsModal">
+      <div class="modal__content">
+        <img src="img/close.svg" class="modal__close" id="instructionsClose" />
         <h2 class="modal__title">How to play</h2>
         <p class="modal__text">
           welcome to love week 2022! hopefully i get a girlfriend this year! lmk
@@ -62,8 +81,8 @@
           There will be a new wordle every day! Take a screenshot of each after
           you solve it and submit it for a cool button! :)
         </p>
-        <div class="modal__start">
-          <p class="modal__start-text">start!</p>
+        <div class="modal__btn" id="startButton">
+          <p class="modal__btn-text">start!</p>
         </div>
       </div>
     </div>

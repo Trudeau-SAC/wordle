@@ -71,6 +71,7 @@ body {
   text-align: center;
 }
 
+/* Modals */
 .modal {
   position: absolute;
   left: 0;
@@ -84,16 +85,6 @@ body {
   justify-content: center;
 }
 
-@media (max-height: 740px) {
-  .modal {
-    display: block;
-  }
-
-  .modal__content {
-    margin: 3rem 0;
-  }
-}
-
 .hidden {
   display: none;
 }
@@ -102,11 +93,20 @@ body {
   background-color: var(--bg-color);
   display: inline-block;
   width: min(45rem, 90vw);
-  height: max(min-content, 95vh);
+  height: min-content;
   padding: 4rem 2.5rem 4.5rem;
   border-radius: 1.5rem;
   position: relative;
   text-align: center;
+}
+@media (max-height: 740px) {
+  .modal {
+    display: block;
+  }
+
+  .modal__content {
+    margin: 3rem 0;
+  }
 }
 
 .modal__close {
@@ -122,15 +122,17 @@ body {
   transform: scale(1.1);
 }
 
-.modal__title {
+.modal__title,
+.modal__time {
   text-transform: lowercase;
   background-image: var(--text-gradient);
+  background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
   display: inline-block;
   font-size: 3.6rem;
   font-weight: 500;
-  margin-bottom: 1.6rem;
+  margin-bottom: 2rem;
 }
 
 .modal__text {
@@ -167,7 +169,7 @@ body {
   gap: 0.5rem;
 }
 
-.modal__start {
+.modal__btn {
   background: var(--button-gradient);
   display: inline-block;
   padding: 1.6rem 3.8rem;
@@ -176,19 +178,30 @@ body {
   cursor: pointer;
 }
 
-.modal__start:hover {
+.modal__btn:hover {
   transform: translateY(-0.2rem);
 }
 
-.modal__start:active {
+.modal__btn:active {
   transform: translateY(0);
 }
 
-.modal__start-text {
+.modal__btn-text {
   color: var(--bg-color);
   font-size: 2rem;
   font-weight: 600;
   margin-top: -0.2rem;
+}
+
+.modal__time {
+  font-size: 2.4rem;
+  display: block;
+  width: fit-content;
+  margin: 3rem 0 1.5rem;
+}
+
+.modal__time:last-of-type {
+  margin: 1rem 0 5rem;
 }
 
 .container {
@@ -236,6 +249,7 @@ body {
   font-size: min(16vw, 8rem);
   font-weight: 600;
   background-image: var(--text-gradient);
+  background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
   display: inline-block;
