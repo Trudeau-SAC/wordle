@@ -7,9 +7,6 @@ window.addEventListener(
   false
 );
 
-// TODO: Save player's input letters, grid tile colors, time, days completed, win or loss
-// TODO: Reload page if new day
-
 // Elements
 // Button to open stats
 let resultButton = document.getElementById('resultButton');
@@ -52,10 +49,7 @@ let keyboardKeys = document.querySelectorAll('.keyboard__key');
 // Time the user starts the game
 let startTime;
 // Index of the day
-let dayIndex = Math.min(
-  Number(String(new Date().getDate()).padStart(2, '0')) - 24,
-  4
-);
+let dayIndex = Math.min(Math.max(new Date().getDay() - 1, 0), 4);
 // Time that has elapsed
 let elapsedTime;
 // Whether the game is currently in play
@@ -13088,10 +13082,17 @@ let checkpointTile = 0;
 let clipboardText = `Love Week Wordle #${dayIndex + 1} \n\n`;
 // Whether the clipboard alert is showing
 let clipboardAlertShowing = false;
-// Letters the user has input
-let inputLetters = [];
-// Colors of the tiles
-let tileColors = [];
+
+const getTimeUntilMidnight = () => {
+  var midnight = new Date();
+  midnight.setHours(24, 0, 0, 0);
+  var now = new Date();
+  return midnight - now;
+};
+
+setTimeout(function () {
+  window.location.reload();
+}, getTimeUntilMidnight());
 
 // Functions
 const show = (element) => {
