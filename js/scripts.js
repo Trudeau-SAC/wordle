@@ -1,4 +1,3 @@
-//Renable transitions on page load
 window.addEventListener(
   'load',
   function load() {
@@ -8,29 +7,64 @@ window.addEventListener(
   false
 );
 
-// Time tracking
-let startTime;
-// Today's date
-let todayDate = Number(String(new Date().getDate()).padStart(2, '0'));
-let dayIndex = Math.min(todayDate - 24, 4);
+// TODO: Save player's input letters, grid tile colors, time, days completed, win or loss
+// TODO: Reload page if new day
 
-// Grid tile
+// Elements
+// Button to open stats
+let resultButton = document.getElementById('resultButton');
+// Button to open instructions
+let instructionsButton = document.getElementById('instructionsButton');
+// Instructions modal
+let instructionsModal = document.getElementById('instructionsModal');
+// Close instructions modal button
+let instructionsClose = document.getElementById('instructionsClose');
+// Start game button
+let startButton = document.getElementById('startButton');
+// Result modal
+let resultModal = document.getElementById('resultModal');
+// Close result modal button
+let resultClose = document.getElementById('resultClose');
+// Result modal title
+let resultTitle = document.getElementById('resultTitle');
+// First line of result modal
+let resultText = document.getElementById('resultText');
+// Playing time
+let resultTime = document.getElementById('resultTime');
+// Time until next wordle
+let nextTime = document.getElementById('nextTime');
+// Share button
+let shareButton = document.getElementById('shareButton');
+// Clipboard alert
+let clipboardAlert = document.getElementById('clipboardAlert');
+// Grid tiles
 let gridTiles = document.querySelectorAll(
   '.grid__tile:not(.grid__tile--small)'
 );
-// Letter in each grid tile
+// Grid letters
 let gridLetters = document.querySelectorAll(
   '.grid__letter:not(.grid__letter--small)'
 );
-// Keyboard keys at bottom of screen
+// Keyboard keys
 let keyboardKeys = document.querySelectorAll('.keyboard__key');
-// Whether the game is currently running of not
+
+// Variables
+// Time the user starts the game
+let startTime;
+// Index of the day
+let dayIndex = Math.min(
+  Number(String(new Date().getDate()).padStart(2, '0')) - 24,
+  4
+);
+// Time that has elapsed
+let elapsedTime;
+// Whether the game is currently in play
 let playing = false;
-// Whether the game is finished or not
+// Whether the game is finished
 let finished = false;
-// Index of current grid tile the user has selected
+// Current tile the user is on
 let currentTile = 0;
-// Correct word
+// Correct words for each day
 let targetwords = [
   ['w', 'o', 'm', 'e', 'n'],
   ['l', 'o', 'v', 'e', 'r'],
@@ -38,6 +72,7 @@ let targetwords = [
   ['s', 'p', 'a', 'c', 'e'],
   ['w', 'o', 'm', 'a', 'n'],
 ];
+// Today's correct word
 let targetWord = targetwords[dayIndex];
 // Letters on the keyboard
 let letters = [
@@ -13049,44 +13084,42 @@ let guesses = [];
 let canContinue = false;
 // Index of first tile of the row user is currently on
 let checkpointTile = 0;
-// Game finished modal
-let finishModal = document.getElementById('finishModal');
-// Title of game finished modal
-let result = document.getElementById('result');
-// First line of game finished modal
-let resultText = document.getElementById('resultText');
-// Close results modal button
-let closeResult = document.getElementById('closeResult');
-// Stats button
-let statsButton = document.getElementById('statsButton');
-// Elapsed time
-let elapsedTimeText = document.getElementById('elapsedTime');
-// Time until next date text
-let newWordleText = document.getElementById('newWordle');
-let clipboardText = `Love Week Wordle ${dayIndex + 1} \n\n`;
+// Clipboard text
+let clipboardText = `Love Week Wordle #${dayIndex + 1} \n\n`;
+// Whether the clipboard alert is showing
+let clipboardAlertShowing = false;
+// Letters the user has input
+let inputLetters = [];
+// Colors of the tiles
+let tileColors = [];
 
-// Handle user input
+// Functions
+const show = (element) => {
+  element.classList.remove('hidden');
+  setTimeout(function () {
+    element.classList.remove('transparent');
+  }, 10);
+};
+
+const hide = (element) => {
+  element.classList.add('transparent');
+  setTimeout(function () {
+    element.classList.add('hidden');
+  }, 300);
+};
+
 const handleKey = (key) => {
-  // If the game is currently playing
   if (playing) {
-    // Set key input to lowercase
     key = key.toLowerCase();
-    // Get the on screen keyboard key that has that key as its data
     let keyboardKey = document.querySelector(`[data-key="${key}"]`);
-    // If the keyboard key exists
     if (keyboardKey) {
-      // Animate the press
       keyboardKey.style.animation = 'keyboard-press .3s';
-      // Remove the animation after competion
       setTimeout(function () {
         keyboardKey.style.animation = '';
       }, 300);
     }
-    // If the user clicks on the enter key
     if (key === 'enter') {
-      // If the user currently has the first tile of the row selected, but not of the first row
       if (currentTile % 5 === 0 && currentTile !== 0) {
-        // Letters the user has entered
         let inputLetters = [
           gridLetters[currentTile - 5].textContent,
           gridLetters[currentTile - 4].textContent,
@@ -13099,33 +13132,23 @@ const handleKey = (key) => {
         }${gridLetters[currentTile - 3].textContent}${
           gridLetters[currentTile - 2].textContent
         }${gridLetters[currentTile - 1].textContent}`;
-        // If the word the user entered is valid
         if (words.includes(guess) && !guesses.includes(guess)) {
-          // Add guess to guesses array
           guesses.push(guess);
-          // User is able to type more letters onto next line
           canContinue = true;
-          // First tile of the row increaes by 5, going onto the next row
           checkpointTile += 5;
-          // Number of letters that are in the correct position
           let correctPositions = 0;
-          // Loop through th letters the user has inputted
           for (i = 0; i < inputLetters.length; i++) {
-            // If the letter is in the correct position, make the background green
             if (targetWord.indexOf(inputLetters[i]) === i) {
               gridTiles[currentTile - 5 + i].classList.add(
                 'grid__tile--correct-position'
               );
               clipboardText += '🟩';
-              // Increment the number of letters at the correct position
               correctPositions++;
-              // If the letter is in the word, but incorrect position, make background yellow
             } else if (targetWord.includes(inputLetters[i])) {
               gridTiles[currentTile - 5 + i].classList.add(
                 'grid__tile--incorrect-position'
               );
               clipboardText += '🟨';
-              // If letter is not in the word, make the background purple
             } else {
               gridTiles[currentTile - 5 + i].classList.add(
                 'grid__tile--incorrect'
@@ -13133,38 +13156,25 @@ const handleKey = (key) => {
               clipboardText += '🟪';
             }
           }
-          // If all letters are in the correct place, call method for user win
           if (correctPositions === 5) {
             handleFinish(true);
-            clipboardText += '\n';
           }
           clipboardText += '\n';
         }
-        // If the user has gotten past the 5th row, they have lost
-        if (currentTile >= 30) {
+        if (currentTile >= 30 && playing) {
           handleFinish(false);
         }
       }
-      // If the user presses backspace
     } else if (key === 'backspace') {
-      // If the user is not on the first tile of the row
       if (currentTile !== checkpointTile) {
-        // Delete the letter in the last tile
         gridLetters[currentTile - 1].textContent = '';
-        // Decrement current tile
         currentTile--;
-        // User can continue
         canContinue = true;
       }
-      // If the user presses a valid letter
     } else if (letters.includes(key)) {
-      // If more letters can be enterred
       if (currentTile % 5 !== 0 || currentTile === 0 || canContinue === true) {
-        // Put the pressed letter in the tile
         gridLetters[currentTile].textContent = key;
-        // Go onto the next tile
         currentTile++;
-        // User cannot continue
         canContinue = false;
       }
     }
@@ -13175,19 +13185,38 @@ const handleKey = (key) => {
   }
 };
 
-let totalTime;
-// Returns the time that has elapsed
-const getTime = (time) => {
+const handleFinish = (win) => {
+  playing = false;
+  finished = true;
+  getElapsedTime(new Date() - startTime);
+  resultTime.textContent = elapsedTime;
+  nextTime.textContent = getTimeUntilNextDay();
+  updateTime();
+  win
+    ? (resultTitle.textContent = 'You win!')
+    : (resultTitle.textContent = 'You lose!');
+  win
+    ? (resultText.textContent = 'Yay you won! Congratulations!')
+    : (resultText.textContent = 'Unfortunate, you lost! Try again next time!');
+  show(resultModal);
+  show(resultButton);
+  resultButton.addEventListener('click', function () {
+    resultModal.classList.remove('hidden');
+  });
+  win
+    ? (clipboardText += `\n\n${elapsedTime}\nDays completed: 1/5`)
+    : (clipboardText += `\n${elapsedTime}\nDays completed: 1/5`);
+};
+
+const getElapsedTime = (time) => {
   let minutes = Math.floor(time / 60000);
   let seconds = Math.floor((time - minutes * 60000) / 1000);
   let milliseconds = Math.floor((time - minutes * 60000 - seconds * 1000) / 10);
-  totalTime = `Time: ${minutes < 10 ? `0${minutes}` : minutes}:${
+  elapsedTime = `Time: ${minutes < 10 ? `0${minutes}` : minutes}:${
     seconds < 10 ? `0${seconds}` : seconds
   }:${milliseconds < 10 ? `0${milliseconds}` : milliseconds}`;
-  return totalTime;
 };
 
-// Returns time until next day
 const getTimeUntilNextDay = () => {
   let midnight = new Date();
   midnight.setHours(24);
@@ -13195,9 +13224,6 @@ const getTimeUntilNextDay = () => {
   midnight.setSeconds(0);
   midnight.setMilliseconds(0);
   let time = midnight - new Date().getTime();
-  if (time <= 0) {
-    location.reload();
-  }
   let hours = Math.floor(time / 3600000);
   let minutes = Math.floor((time - hours * 3600000) / 60000);
   let seconds = Math.floor((time - hours * 3600000 - minutes * 60000) / 1000);
@@ -13206,96 +13232,52 @@ const getTimeUntilNextDay = () => {
   }:${seconds < 10 ? `0${seconds}` : seconds}`;
 };
 
-// Function called when game is done
-const handleFinish = (win) => {
-  // Game is not in play
-  playing = false;
-  // Game is finished
-  finished = true;
-  //Calculate the time that has elapsed
-  let elapsedTime = getTime(new Date() - startTime);
-  // Change the elapsed time text in the results modal
-  elapsedTimeText.textContent = elapsedTime;
-  // Calculate the time until the next day
-  newWordleText.textContent = getTimeUntilNextDay();
-  updateTime();
-  // Change title of result modal based on win or loss
-  win ? (result.textContent = 'You win!') : (result.textContent = 'You lose!');
-  win
-    ? (resultText.textContent = 'Yay you won! Congratulations!')
-    : (resultText.textContent = 'Unfortunate, you lost! Try again next time!');
-  // Show the modal
-  finishModal.classList.remove('hidden');
-  // Show stats button
-  statsButton.classList.remove('hidden');
-  // Add click event to stats button
-  statsButton.addEventListener('click', function () {
-    finishModal.classList.remove('hidden');
-  });
-  clipboardText += `\n\n${totalTime}\nCompleted: 1/5`;
-};
-
 const updateTime = () => {
   setInterval(function () {
-    // Calculate the time until the next day
-    newWordleText.textContent = getTimeUntilNextDay();
+    nextTime.textContent = getTimeUntilNextDay();
   }, 1000);
 };
 
-// If user clicks on the close result button, close the modal
-closeResult.addEventListener('click', function () {
-  finishModal.classList.add('hidden');
+// Event listeners
+document.addEventListener('keydown', function (e) {
+  handleKey(e.key);
 });
 
-// Set click event listener for each key on the on-screen keyboard
 keyboardKeys.forEach((keyboardKey) => {
   keyboardKey.addEventListener('click', function () {
-    // Call function to handle keyboard click and pass in the key data
     handleKey(keyboardKey.getAttribute('data-key'));
   });
 });
 
-// Add keydown event listener
-document.addEventListener('keydown', function (e) {
-  // Call function to handle keyboard click and pass in the key that was pressed
-  handleKey(e.key);
-});
-
-// Instructions modal
-const modalInstructions = document.getElementById('instructionsModal');
-// Button to close the modal
-const closeModal = document.getElementById('instructionsClose');
-// Start button
-const startButton = document.getElementById('startButton');
-// Instructions button
-const instructionsButton = document.querySelector('.question');
-// Add click event listener to both the close button and start button
-[closeModal, startButton].forEach((element) => {
+[instructionsClose, startButton].forEach((element) => {
   element.addEventListener('click', () => {
-    // Add hidden class to instructions modal
-    modalInstructions.classList.add('hidden');
-    // Game is in play
+    hide(instructionsModal);
     playing = true;
-    // Start tracking time
     startTime = new Date();
   });
 });
 
-// Add click event to instructions button
 instructionsButton.addEventListener('click', function () {
-  // Remove hidden class from instructions modal
-  modalInstructions.classList.remove('hidden');
-  //Game is not in play
+  show(instructionsModal);
   playing = false;
 });
 
-// Share button
-const shareButton = document.getElementById('shareButton');
-const clipboardAlert = document.getElementById('clipboardAlert');
+resultButton.addEventListener('click', () => {
+  show(resultModal);
+});
+
+resultClose.addEventListener('click', () => {
+  hide(resultModal);
+});
+
 shareButton.addEventListener('click', function () {
   navigator.clipboard.writeText(clipboardText);
-  clipboardAlert.classList.remove('hidden');
-  setTimeout(function () {
-    clipboardAlert.classList.add('hidden');
-  }, 3000);
+  if (!clipboardAlertShowing) {
+    show(clipboardAlert);
+    clipboardAlertShowing = true;
+    setTimeout(function () {
+      hide(clipboardAlert);
+      clipboardAlertShowing = false;
+    }, 3000);
+  }
 });

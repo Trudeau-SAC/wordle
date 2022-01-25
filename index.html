@@ -8,99 +8,17 @@
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="icon" type="image/x-icon" href="/img/favicon.svg" />
   </head>
-  <!-- <body oncontextmenu="return false"> -->
   <body class="preload">
-    <div class="alert hidden" id="clipboardAlert">
-      <p class="alert__text">
-        Copied to clipboard! Share it to social media and your friends!
-      </p>
+    <div class="stats-btn transparent hidden" id="resultButton">
+      <img src="img/chart.svg" alt="Chart icon" class="stats-btn__icon" />
     </div>
-    <div class="modal hidden" id="finishModal">
-      <div class="modal__content">
-        <img src="img/close.svg" class="modal__close" id="closeResult" />
-        <h2 class="modal__title" id="result">You win!</h2>
-        <p class="modal__text" id="resultText">
-          Yay! You won! Congratulations!
-        </p>
-        <p class="modal__text">
-          There will be a new worldle every day of the week, so make sure to
-          come back for more!
-        </p>
-        <p class="modal__text">Love you and see you next time! 😘</p>
-        <p class="modal__time" id="elapsedTime">time: 01:12:22</p>
-        <p class="modal__time" id="newWordle">next wordle: 01:12:22</p>
-        <div class="modal__btn" id="shareButton">
-          <p class="modal__btn-text">share!</p>
-        </div>
-      </div>
-    </div>
-    <div class="modal" id="instructionsModal">
-      <div class="modal__content">
-        <img src="img/close.svg" class="modal__close" id="instructionsClose" />
-        <h2 class="modal__title">How to play</h2>
-        <p class="modal__text">
-          Welcome to love week 2022! Hopefully I get a girlfriend this year! Lmk
-          if you’re interested :)
-        </p>
-        <p class="modal__text">
-          You will have 6 guesses to find the 5 letter word. Each guess has to
-          be a valid word.
-        </p>
-        <p class="modal__text">Hit the enter button to submit.</p>
-        <p class="modal__text">
-          After each guess, the color of the tiles will change to show how close
-          your guess was to the word.
-        </p>
-        <p class="modal__text modal__text--bold">Example</p>
-        <div class="modal__example-grid">
-          <div class="grid__tile grid__tile--small grid__tile--incorrect">
-            <p class="grid__letter grid__letter--small">a</p>
-          </div>
-          <div
-            class="grid__tile grid__tile--small grid__tile--correct-position"
-          >
-            <p class="grid__letter grid__letter--small">t</p>
-          </div>
-          <div
-            class="grid__tile grid__tile--small grid__tile--incorrect-position"
-          >
-            <p class="grid__letter grid__letter--small">e</p>
-          </div>
-          <div
-            class="grid__tile grid__tile--small grid__tile--incorrect-position"
-          >
-            <p class="grid__letter grid__letter--small">e</p>
-          </div>
-          <div class="grid__tile grid__tile--small grid__tile--incorrect">
-            <p class="grid__letter grid__letter--small">z</p>
-          </div>
-        </div>
-        <p class="modal__text">
-          <span class="modal__text--bold">t</span> is in the word and in the
-          correct spot, <span class="modal__text--bold">e</span> is in the word
-          but in the wrong spot, and <span class="modal__text--bold">a</span>,
-          <span class="modal__text--bold">z</span> are not in the word at any
-          spot.
-        </p>
-        <p class="modal__text modal__text--bold">
-          There will be a new wordle every day! Take a screenshot of each after
-          you solve it and submit it for a cool button! :)
-        </p>
-        <div class="modal__btn" id="startButton">
-          <p class="modal__btn-text">start!</p>
-        </div>
-      </div>
+    <div class="instructions-btn" id="instructionsButton">
+      <p class="instructions-btn__question">?</p>
     </div>
     <div class="container">
-      <div class="question">
-        <p class="question__mark">?</p>
-      </div>
-      <div class="stats hidden" id="statsButton">
-        <img src="img/chart.svg" alt="" class="stats__icon" />
-      </div>
       <div class="header">
         <h1 class="title">love week</h1>
-        <img src="img/heart.svg" alt="Heart" class="heart" />
+        <img src="img/heart.svg" alt="love you" class="heart" />
       </div>
       <div class="grid">
         <div class="grid__row">
@@ -301,6 +219,93 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="modal" id="instructionsModal">
+      <div class="modal__content">
+        <img
+          src="img/close.svg"
+          alt="Close button"
+          class="modal__close"
+          id="instructionsClose"
+        />
+        <h2 class="modal__title">how to play</h2>
+        <p class="modal__text">
+          Welcome to love week 2022! Hopefully I find a girlfriend this year!
+          Lmk if you’re interested. Thank you! :)
+        </p>
+        <p class="modal__text">
+          You will have 6 guesses to find the 5 letter word. Each guess has to
+          be a valid word.
+        </p>
+        <p class="modal__text">Hit the enter button to submit.</p>
+        <p class="modal__text">
+          After each guess, the color of the tiles will change to show how close
+          your guess was to the word.
+        </p>
+        <p class="modal__text modal__text--bold">Example</p>
+        <div class="modal__example-grid">
+          <div class="grid__tile grid__tile--small grid__tile--incorrect">
+            <p class="grid__letter grid__letter--small">j</p>
+          </div>
+          <div
+            class="grid__tile grid__tile--small grid__tile--incorrect-position"
+          >
+            <p class="grid__letter grid__letter--small">i</p>
+          </div>
+          <div
+            class="grid__tile grid__tile--small grid__tile--correct-position"
+          >
+            <p class="grid__letter grid__letter--small">m</p>
+          </div>
+          <div
+            class="grid__tile grid__tile--small grid__tile--incorrect-position"
+          >
+            <p class="grid__letter grid__letter--small">i</p>
+          </div>
+          <div class="grid__tile grid__tile--small grid__tile--incorrect">
+            <p class="grid__letter grid__letter--small">n</p>
+          </div>
+        </div>
+        <p class="modal__text">
+          <span class="modal__text--bold">m</span> is in the word and in the
+          correct spot, <span class="modal__text--bold">i</span> is in the word
+          but in the wrong spot, and <span class="modal__text--bold">j</span>,
+          <span class="modal__text--bold">n</span> are not in the word at any
+          spot.
+        </p>
+        <p class="modal__text modal__text--bold">
+          There will be a new wordle every day! Take a screenshot of each after
+          you solve it and submit it for a cool button! :)
+        </p>
+        <div class="modal__btn" id="startButton">
+          <p class="modal__btn-text">Start!</p>
+        </div>
+      </div>
+    </div>
+    <div class="modal transparent hidden" id="resultModal">
+      <div class="modal__content">
+        <img
+          src="img/close.svg"
+          alt="Close button"
+          class="modal__close"
+          id="resultClose"
+        />
+        <h2 class="modal__title" id="resultTitle">You win!</h2>
+        <p class="modal__text" id="resultText">Yay you won! Congrats! :)</p>
+        <p class="modal__text">
+          There will be a new Wordle every day this week, so make sure to come
+          back for more!
+        </p>
+        <p class="modal__text">Love you, see you next time! 😘</p>
+        <p class="modal__time" id="resultTime">Time: 03:02:04</p>
+        <p class="modal__time" id="nextTime">Next Wordle: 03:02:04</p>
+        <div class="modal__btn" id="shareButton">
+          <p class="modal__btn-text">Share!</p>
+        </div>
+      </div>
+    </div>
+    <div class="clipboard-alert transparent hidden" id="clipboardAlert">
+      <div class="clipboard-alert__text">Copied to clipboard! Share it! :)</div>
     </div>
   </body>
   <script src="js/scripts.js"></script>
