@@ -9,7 +9,12 @@
     <link rel="icon" type="image/x-icon" href="/img/favicon.svg" />
   </head>
   <!-- <body oncontextmenu="return false"> -->
-  <body>
+  <body class="preload">
+    <div class="alert hidden" id="clipboardAlert">
+      <p class="alert__text">
+        Copied to clipboard! Share it to social media and your friends!
+      </p>
+    </div>
     <div class="modal hidden" id="finishModal">
       <div class="modal__content">
         <img src="img/close.svg" class="modal__close" id="closeResult" />
@@ -22,8 +27,8 @@
           come back for more!
         </p>
         <p class="modal__text">Love you and see you next time! 😘</p>
-        <p class="modal__time">time: 01:12:22</p>
-        <p class="modal__time">next wordle: 01:12:22</p>
+        <p class="modal__time" id="elapsedTime">time: 01:12:22</p>
+        <p class="modal__time" id="newWordle">next wordle: 01:12:22</p>
         <div class="modal__btn" id="shareButton">
           <p class="modal__btn-text">share!</p>
         </div>
@@ -34,7 +39,7 @@
         <img src="img/close.svg" class="modal__close" id="instructionsClose" />
         <h2 class="modal__title">How to play</h2>
         <p class="modal__text">
-          welcome to love week 2022! hopefully i get a girlfriend this year! lmk
+          Welcome to love week 2022! Hopefully I get a girlfriend this year! Lmk
           if you’re interested :)
         </p>
         <p class="modal__text">
@@ -90,8 +95,11 @@
       <div class="question">
         <p class="question__mark">?</p>
       </div>
+      <div class="stats hidden" id="statsButton">
+        <img src="img/chart.svg" alt="" class="stats__icon" />
+      </div>
       <div class="header">
-        <h1 class="title">Love Week</h1>
+        <h1 class="title">love week</h1>
         <img src="img/heart.svg" alt="Heart" class="heart" />
       </div>
       <div class="grid">

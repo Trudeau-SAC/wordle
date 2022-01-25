@@ -1,4 +1,19 @@
-// Variables
+//Renable transitions on page load
+window.addEventListener(
+  'load',
+  function load() {
+    window.removeEventListener('load', load, false);
+    document.body.classList.remove('preload');
+  },
+  false
+);
+
+// Time tracking
+let startTime;
+// Today's date
+let todayDate = Number(String(new Date().getDate()).padStart(2, '0'));
+let dayIndex = Math.min(todayDate - 24, 4);
+
 // Grid tile
 let gridTiles = document.querySelectorAll(
   '.grid__tile:not(.grid__tile--small)'
@@ -16,7 +31,14 @@ let finished = false;
 // Index of current grid tile the user has selected
 let currentTile = 0;
 // Correct word
-let targetWord = ['w', 'o', 'm', 'e', 'n'];
+let targetwords = [
+  ['w', 'o', 'm', 'e', 'n'],
+  ['l', 'o', 'v', 'e', 'r'],
+  ['p', 'o', 'i', 'n', 't'],
+  ['s', 'p', 'a', 'c', 'e'],
+  ['w', 'o', 'm', 'a', 'n'],
+];
+let targetWord = targetwords[dayIndex];
 // Letters on the keyboard
 let letters = [
   'q',
@@ -13035,6 +13057,13 @@ let result = document.getElementById('result');
 let resultText = document.getElementById('resultText');
 // Close results modal button
 let closeResult = document.getElementById('closeResult');
+// Stats button
+let statsButton = document.getElementById('statsButton');
+// Elapsed time
+let elapsedTimeText = document.getElementById('elapsedTime');
+// Time until next date text
+let newWordleText = document.getElementById('newWordle');
+let clipboardText = `Love Week Wordle ${dayIndex + 1} \n\n`;
 
 // Handle user input
 const handleKey = (key) => {
@@ -13087,6 +13116,7 @@ const handleKey = (key) => {
               gridTiles[currentTile - 5 + i].classList.add(
                 'grid__tile--correct-position'
               );
+              clipboardText += '🟩';
               // Increment the number of letters at the correct position
               correctPositions++;
               // If the letter is in the word, but incorrect position, make background yellow
@@ -13094,17 +13124,21 @@ const handleKey = (key) => {
               gridTiles[currentTile - 5 + i].classList.add(
                 'grid__tile--incorrect-position'
               );
+              clipboardText += '🟨';
               // If letter is not in the word, make the background purple
             } else {
               gridTiles[currentTile - 5 + i].classList.add(
                 'grid__tile--incorrect'
               );
+              clipboardText += '🟪';
             }
           }
           // If all letters are in the correct place, call method for user win
           if (correctPositions === 5) {
             handleFinish(true);
+            clipboardText += '\n';
           }
+          clipboardText += '\n';
         }
         // If the user has gotten past the 5th row, they have lost
         if (currentTile >= 30) {
@@ -13130,9 +13164,46 @@ const handleKey = (key) => {
         gridLetters[currentTile].textContent = key;
         // Go onto the next tile
         currentTile++;
+        // User cannot continue
+        canContinue = false;
       }
     }
+  } else if (finished) {
+    if (key.toLowerCase() === 'enter') {
+      finishModal.classList.remove('hidden');
+    }
   }
+};
+
+let totalTime;
+// Returns the time that has elapsed
+const getTime = (time) => {
+  let minutes = Math.floor(time / 60000);
+  let seconds = Math.floor((time - minutes * 60000) / 1000);
+  let milliseconds = Math.floor((time - minutes * 60000 - seconds * 1000) / 10);
+  totalTime = `Time: ${minutes < 10 ? `0${minutes}` : minutes}:${
+    seconds < 10 ? `0${seconds}` : seconds
+  }:${milliseconds < 10 ? `0${milliseconds}` : milliseconds}`;
+  return totalTime;
+};
+
+// Returns time until next day
+const getTimeUntilNextDay = () => {
+  let midnight = new Date();
+  midnight.setHours(24);
+  midnight.setMinutes(0);
+  midnight.setSeconds(0);
+  midnight.setMilliseconds(0);
+  let time = midnight - new Date().getTime();
+  if (time <= 0) {
+    location.reload();
+  }
+  let hours = Math.floor(time / 3600000);
+  let minutes = Math.floor((time - hours * 3600000) / 60000);
+  let seconds = Math.floor((time - hours * 3600000 - minutes * 60000) / 1000);
+  return `Next Wordle: ${hours < 10 ? `0${hours}` : hours}:${
+    minutes < 10 ? `0${minutes}` : minutes
+  }:${seconds < 10 ? `0${seconds}` : seconds}`;
 };
 
 // Function called when game is done
@@ -13141,6 +13212,13 @@ const handleFinish = (win) => {
   playing = false;
   // Game is finished
   finished = true;
+  //Calculate the time that has elapsed
+  let elapsedTime = getTime(new Date() - startTime);
+  // Change the elapsed time text in the results modal
+  elapsedTimeText.textContent = elapsedTime;
+  // Calculate the time until the next day
+  newWordleText.textContent = getTimeUntilNextDay();
+  updateTime();
   // Change title of result modal based on win or loss
   win ? (result.textContent = 'You win!') : (result.textContent = 'You lose!');
   win
@@ -13148,6 +13226,20 @@ const handleFinish = (win) => {
     : (resultText.textContent = 'Unfortunate, you lost! Try again next time!');
   // Show the modal
   finishModal.classList.remove('hidden');
+  // Show stats button
+  statsButton.classList.remove('hidden');
+  // Add click event to stats button
+  statsButton.addEventListener('click', function () {
+    finishModal.classList.remove('hidden');
+  });
+  clipboardText += `\n\n${totalTime}\nCompleted: 1/5`;
+};
+
+const updateTime = () => {
+  setInterval(function () {
+    // Calculate the time until the next day
+    newWordleText.textContent = getTimeUntilNextDay();
+  }, 1000);
 };
 
 // If user clicks on the close result button, close the modal
@@ -13184,6 +13276,8 @@ const instructionsButton = document.querySelector('.question');
     modalInstructions.classList.add('hidden');
     // Game is in play
     playing = true;
+    // Start tracking time
+    startTime = new Date();
   });
 });
 
@@ -13195,8 +13289,13 @@ instructionsButton.addEventListener('click', function () {
   playing = false;
 });
 
-document.addEventListener('keydown', function (e) {
-  if (finished && e.key === 'Enter') {
-    finishModal.classList.remove('hidden');
-  }
+// Share button
+const shareButton = document.getElementById('shareButton');
+const clipboardAlert = document.getElementById('clipboardAlert');
+shareButton.addEventListener('click', function () {
+  navigator.clipboard.writeText(clipboardText);
+  clipboardAlert.classList.remove('hidden');
+  setTimeout(function () {
+    clipboardAlert.classList.add('hidden');
+  }, 3000);
 });
