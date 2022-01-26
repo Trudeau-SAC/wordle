@@ -121,7 +121,7 @@ body {
 /* Container */
 .container {
   position: relative;
-  height: 100vh;
+  height: calc(100vh - calc(100vh - 100%));
   padding-top: 15vh;
   padding-bottom: 2vh;
   display: grid;
@@ -248,7 +248,7 @@ body {
   }
 }
 
-@media (max-height: 750px) {
+@media (max-height: 700px) {
   .container {
     padding-top: 6vh;
   }
