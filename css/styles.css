@@ -126,7 +126,13 @@ body {
   padding-bottom: 2vh;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  gap: 2rem;
+  gap: 5rem;
+}
+
+@media (max-width: 480px) {
+  .container {
+    gap: 2.5rem;
+  }
 }
 
 /* Header */
