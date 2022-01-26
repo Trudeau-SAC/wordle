@@ -10,11 +10,6 @@ window.addEventListener(
 
 // localStorage.removeItem('userInput');
 // localStorage.removeItem('startTime');
-// localStorage.removeItem('startDate');
-// localStorage.removeItem('daysCompleted');
-// localStorage.removeItem('completedToday');
-
-// Functions
 
 // Elements
 // Button to open stats
@@ -35,8 +30,6 @@ const resultClose = document.getElementById('resultClose');
 const resultTitle = document.getElementById('resultTitle');
 // First line of result modal
 const resultText = document.getElementById('resultText');
-// Playing time
-const resultTime = document.getElementById('resultTime');
 // Time until next wordle
 const nextTime = document.getElementById('nextTime');
 // Share button
@@ -61,9 +54,9 @@ const dayIndex = Math.min(Math.max(new Date().getDay() - 1, 0), 4);
 const targetwords = [
   ['w', 'o', 'm', 'e', 'n'],
   ['l', 'o', 'v', 'e', 'r'],
-  ['p', 'o', 'i', 'n', 't'],
-  ['s', 'p', 'a', 'c', 'e'],
   ['w', 'o', 'm', 'a', 'n'],
+  ['s', 'p', 'a', 'c', 'e'],
+  ['p', 'o', 'i', 'n', 't'],
 ];
 // Today's correct word
 const targetWord = targetwords[dayIndex];
@@ -13073,11 +13066,9 @@ const words = [
 ];
 
 // Game variables
-// Time that has elapsed
-let elapsedTime;
 // Whether the game is currently in play
 let playing = false;
-// Whether the game is finished
+// Whether the game is finished\
 let finished = false;
 // Current tile the user is on
 let currentTile = 0;
@@ -13110,26 +13101,14 @@ const setData = (dataName, dataValue) => {
   }
 };
 
-// Time the user starts the game
-let startTime;
-// Days the user has completed
-let daysCompleted = Number(getData('daysCompleted', 0));
-// Whether the user has completed today's
-let completedToday = JSON.parse(
-  getData('completedToday', JSON.stringify(false))
-);
+// Reset input on new day
+let startTime = getData('startTime', new Date().getDay());
+console.log(startTime);
+if (new Date().getDay() !== startTime) {
+  setData('userInput', []);
+}
 // Saves tile input
 let userInput = JSON.parse(getData('userInput', JSON.stringify([])));
-// For reloading page when it gets to next day
-let startDate = new Date(getData('startDate', null));
-if (startDate) {
-  if (startDate.toDateString() !== new Date().toDateString()) {
-    setData(userInput, []);
-    setData('startDate', new Date());
-  }
-} else {
-  setData('startDate', new Date());
-}
 
 // Functions
 // Show an element
@@ -13232,8 +13211,6 @@ const handleKey = (key) => {
 const handleFinish = (win) => {
   playing = false;
   finished = true;
-  getElapsedTime(new Date() - startTime);
-  resultTime.textContent = elapsedTime;
   nextTime.textContent = getTimeUntilNextDay();
   updateTime();
   win
@@ -13242,28 +13219,11 @@ const handleFinish = (win) => {
   win
     ? (resultText.textContent = 'Yay you won! Congratulations!')
     : (resultText.textContent = 'Unfortunate, you lost! Try again next time!');
-  if (win) {
-    if (!getData('completedToday', false)) {
-      daysCompleted++;
-      setData('daysCompleted', daysCompleted);
-      setData('completedToday', JSON.stringify(true));
-    }
-  }
   show(resultModal);
   show(resultButton);
   resultButton.addEventListener('click', function () {
     resultModal.classList.remove('hidden');
   });
-  clipboardText += `\n\n${elapsedTime}\nDays completed: ${daysCompleted}/5`;
-};
-
-const getElapsedTime = (time) => {
-  let minutes = Math.floor(time / 60000);
-  let seconds = Math.floor((time - minutes * 60000) / 1000);
-  let milliseconds = Math.floor((time - minutes * 60000 - seconds * 1000) / 10);
-  elapsedTime = `Time: ${minutes < 10 ? `0${minutes}` : minutes}:${
-    seconds < 10 ? `0${seconds}` : seconds
-  }:${milliseconds < 10 ? `0${milliseconds}` : milliseconds}`;
 };
 
 const getTimeUntilNextDay = () => {
@@ -13319,8 +13279,6 @@ keyboardKeys.forEach((keyboardKey) => {
     hide(instructionsModal);
     if (!finished) {
       playing = true;
-      startTime = new Date();
-      console.log('change start time');
       fillValues();
     }
   });
