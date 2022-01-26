@@ -13096,6 +13096,7 @@ const getData = (dataName, defaultValue) => {
     let value = localStorage.getItem(dataName);
     return value ? value : defaultValue;
   }
+  setData(dataName, defaultValue);
   return defaultValue;
 };
 
