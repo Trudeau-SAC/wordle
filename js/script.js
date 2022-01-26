@@ -1,3 +1,4 @@
+// Remove class not allowing animations on page load
 window.addEventListener(
   'load',
   function load() {
@@ -7,59 +8,54 @@ window.addEventListener(
   false
 );
 
+// localStorage.removeItem('userInput');
+// localStorage.removeItem('startTime');
+
+// Functions
+
 // Elements
 // Button to open stats
-let resultButton = document.getElementById('resultButton');
+const resultButton = document.getElementById('resultButton');
 // Button to open instructions
-let instructionsButton = document.getElementById('instructionsButton');
+const instructionsButton = document.getElementById('instructionsButton');
 // Instructions modal
-let instructionsModal = document.getElementById('instructionsModal');
+const instructionsModal = document.getElementById('instructionsModal');
 // Close instructions modal button
-let instructionsClose = document.getElementById('instructionsClose');
+const instructionsClose = document.getElementById('instructionsClose');
 // Start game button
-let startButton = document.getElementById('startButton');
+const startButton = document.getElementById('startButton');
 // Result modal
-let resultModal = document.getElementById('resultModal');
+const resultModal = document.getElementById('resultModal');
 // Close result modal button
-let resultClose = document.getElementById('resultClose');
+const resultClose = document.getElementById('resultClose');
 // Result modal title
-let resultTitle = document.getElementById('resultTitle');
+const resultTitle = document.getElementById('resultTitle');
 // First line of result modal
-let resultText = document.getElementById('resultText');
+const resultText = document.getElementById('resultText');
 // Playing time
-let resultTime = document.getElementById('resultTime');
+const resultTime = document.getElementById('resultTime');
 // Time until next wordle
-let nextTime = document.getElementById('nextTime');
+const nextTime = document.getElementById('nextTime');
 // Share button
-let shareButton = document.getElementById('shareButton');
+const shareButton = document.getElementById('shareButton');
 // Clipboard alert
-let clipboardAlert = document.getElementById('clipboardAlert');
+const clipboardAlert = document.getElementById('clipboardAlert');
 // Grid tiles
-let gridTiles = document.querySelectorAll(
+const gridTiles = document.querySelectorAll(
   '.grid__tile:not(.grid__tile--small)'
 );
 // Grid letters
-let gridLetters = document.querySelectorAll(
+const gridLetters = document.querySelectorAll(
   '.grid__letter:not(.grid__letter--small)'
 );
 // Keyboard keys
-let keyboardKeys = document.querySelectorAll('.keyboard__key');
+const keyboardKeys = document.querySelectorAll('.keyboard__key');
 
-// Variables
-// Time the user starts the game
-let startTime;
+// Constants
 // Index of the day
-let dayIndex = Math.min(Math.max(new Date().getDay() - 1, 0), 4);
-// Time that has elapsed
-let elapsedTime;
-// Whether the game is currently in play
-let playing = false;
-// Whether the game is finished
-let finished = false;
-// Current tile the user is on
-let currentTile = 0;
+const dayIndex = Math.min(Math.max(new Date().getDay() - 1, 0), 4);
 // Correct words for each day
-let targetwords = [
+const targetwords = [
   ['w', 'o', 'm', 'e', 'n'],
   ['l', 'o', 'v', 'e', 'r'],
   ['p', 'o', 'i', 'n', 't'],
@@ -67,9 +63,9 @@ let targetwords = [
   ['w', 'o', 'm', 'a', 'n'],
 ];
 // Today's correct word
-let targetWord = targetwords[dayIndex];
+const targetWord = targetwords[dayIndex];
 // Letters on the keyboard
-let letters = [
+const letters = [
   'q',
   'w',
   'e',
@@ -98,7 +94,7 @@ let letters = [
   'm',
 ];
 // Valid words
-let words = [
+const words = [
   'cigar',
   'rebut',
   'sissy',
@@ -13072,6 +13068,16 @@ let words = [
   'zymes',
   'zymic',
 ];
+
+// Game variables
+// Time that has elapsed
+let elapsedTime;
+// Whether the game is currently in play
+let playing = false;
+// Whether the game is finished
+let finished = false;
+// Current tile the user is on
+let currentTile = 0;
 // Guesses
 let guesses = [];
 // If the user can type more letters
@@ -13083,18 +13089,32 @@ let clipboardText = `Love Week Wordle #${dayIndex + 1} \n\n`;
 // Whether the clipboard alert is showing
 let clipboardAlertShowing = false;
 
-const getTimeUntilMidnight = () => {
-  var midnight = new Date();
-  midnight.setHours(24, 0, 0, 0);
-  var now = new Date();
-  return midnight - now;
+// Variable storing
+// Returns local storage data if any with default value
+const getData = (dataName, defaultValue) => {
+  if (typeof Storage !== 'undefined') {
+    let value = localStorage.getItem(dataName);
+    return value ? value : defaultValue;
+  }
+  return defaultValue;
 };
 
-setTimeout(function () {
-  window.location.reload();
-}, getTimeUntilMidnight());
+// Set data in local storage
+const setData = (dataName, dataValue) => {
+  if (typeof Storage !== 'undefined') {
+    localStorage.setItem(dataName, dataValue);
+  }
+};
+
+// Time the user starts the game
+let startTime = JSON.parse(getData('startTime', null));
+// Days the user has completed
+let daysCompleted = Number(getData('daysCompleted', 0));
+// Saves tile input
+let userInput = JSON.parse(getData('userInput', JSON.stringify([])));
 
 // Functions
+// Show an element
 const show = (element) => {
   element.classList.remove('hidden');
   setTimeout(function () {
@@ -13102,11 +13122,20 @@ const show = (element) => {
   }, 10);
 };
 
+// Hide an element
 const hide = (element) => {
   element.classList.add('transparent');
   setTimeout(function () {
     element.classList.add('hidden');
   }, 300);
+};
+
+// Returns milliseconds until midnight
+const getTimeUntilMidnight = () => {
+  var midnight = new Date();
+  midnight.setHours(24, 0, 0, 0);
+  var now = new Date();
+  return midnight - now;
 };
 
 const handleKey = (key) => {
@@ -13179,10 +13208,6 @@ const handleKey = (key) => {
         canContinue = false;
       }
     }
-  } else if (finished) {
-    if (key.toLowerCase() === 'enter') {
-      resultModal.classList.remove('hidden');
-    }
   }
 };
 
@@ -13239,22 +13264,41 @@ const updateTime = () => {
   }, 1000);
 };
 
+const fillValues = () => {
+  userInput.forEach(function (input) {
+    handleKey(input);
+  });
+};
+
 // Event listeners
+// Keyboard keydown
 document.addEventListener('keydown', function (e) {
-  handleKey(e.key);
+  if (playing) {
+    handleKey(e.key);
+    userInput.push(e.key);
+    setData('userInput', JSON.stringify(userInput));
+  }
 });
 
+// User clicking on screen keyboard
 keyboardKeys.forEach((keyboardKey) => {
   keyboardKey.addEventListener('click', function () {
-    handleKey(keyboardKey.getAttribute('data-key'));
+    if (playing) {
+      handleKey(keyboardKey.getAttribute('data-key'));
+      userInput.push(keyboardKey.getAttribute('data-key'));
+      setData('userInput', JSON.stringify(userInput));
+    }
   });
 });
 
 [instructionsClose, startButton].forEach((element) => {
   element.addEventListener('click', () => {
     hide(instructionsModal);
-    playing = true;
-    startTime = new Date();
+    if (!finished) {
+      playing = true;
+      startTime = new Date();
+      fillValues();
+    }
   });
 });
 
@@ -13265,6 +13309,7 @@ instructionsButton.addEventListener('click', function () {
 
 resultButton.addEventListener('click', () => {
   show(resultModal);
+  playing = false;
 });
 
 resultClose.addEventListener('click', () => {
@@ -13282,3 +13327,9 @@ shareButton.addEventListener('click', function () {
     }, 3000);
   }
 });
+
+// Called on page load
+// Reloads page at midnight
+setTimeout(function () {
+  window.location.reload();
+}, getTimeUntilMidnight());
