@@ -13187,9 +13187,9 @@ const handleKey = (key) => {
             handleFinish(true);
           }
           clipboardText += '\n';
-        }
-        if (currentTile >= 30 && playing) {
-          handleFinish(false);
+          if (currentTile >= 30 && playing) {
+            handleFinish(false);
+          }
         }
       }
     } else if (key === 'backspace') {
