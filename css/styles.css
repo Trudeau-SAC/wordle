@@ -135,6 +135,12 @@ body {
   }
 }
 
+@media (max-height: 640px) {
+  .container {
+    gap: 2.5rem;
+  }
+}
+
 /* Header */
 .header {
   position: relative;
@@ -323,12 +329,6 @@ body {
   background-color: var(--incorrect-color);
 }
 
-@media (max-width: 768px) {
-  .keyboard__key:hover {
-    background-color: var(--bg-color);
-  }
-}
-
 @keyframes keyboard-press {
   50% {
     background-color: var(--incorrect-color);
@@ -348,6 +348,18 @@ body {
   font-weight: 500;
   color: var(--secondary-color);
   transform: translateY(-0.1rem);
+}
+
+@media (max-width: 768px) {
+  .keyboard__key:hover {
+    background-color: var(--bg-color);
+  }
+}
+
+@media (max-width: 360px) {
+  .keyboard__letter {
+    font-size: 1.4rem;
+  }
 }
 
 /* Clipboard Alert */
