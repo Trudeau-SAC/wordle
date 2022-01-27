@@ -13103,9 +13103,9 @@ const setData = (dataName, dataValue) => {
 
 // Reset input on new day
 let startTime = getData('startTime', new Date().getDay());
-console.log(startTime);
+console.log(startTime, new Date().getDay());
 if (new Date().getDay() !== startTime) {
-  setData('userInput', []);
+  setData('userInput', JSON.stringify([]));
 }
 // Saves tile input
 let userInput = JSON.parse(getData('userInput', JSON.stringify([])));
