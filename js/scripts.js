@@ -13132,6 +13132,7 @@ const getTimeUntilMidnight = () => {
   var midnight = new Date();
   midnight.setHours(24, 0, 0, 0);
   var now = new Date();
+  console.log(midnight - now);
   return midnight - now;
 };
 
@@ -13214,8 +13215,8 @@ const handleFinish = (win) => {
   nextTime.textContent = getTimeUntilNextDay();
   updateTime();
   win
-    ? (resultTitle.textContent = 'You win!')
-    : (resultTitle.textContent = 'You lose!');
+    ? (resultTitle.textContent = 'You won :)')
+    : (resultTitle.textContent = 'You lost :(');
   win
     ? (resultText.textContent = 'Yay you won! Congratulations!')
     : (resultText.textContent = 'Unfortunate, you lost! Try again next time!');
