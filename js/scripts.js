@@ -13102,16 +13102,16 @@ const setData = (dataName, dataValue) => {
 };
 
 // Reset input on new day
-let startTime = getData('startTime', null);
-if (!startTime) {
+let startTime = getData('startTime', 10);
+console.log(startTime, new Date().getDay());
+if (Number(startTime) !== new Date().getDay()) {
+  setData('userInput', JSON.stringify([]));
   setData('startTime', new Date().getDay());
-} else {
-  if (new Date().getDay() !== startTime) {
-    setData('userInput', JSON.stringify([]));
-  }
+  console.log('Reset start time');
 }
 // Saves tile input
 let userInput = JSON.parse(getData('userInput', JSON.stringify([])));
+console.log(userInput);
 
 // Functions
 // Show an element
