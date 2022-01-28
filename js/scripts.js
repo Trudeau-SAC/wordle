@@ -13102,6 +13102,7 @@ const setData = (dataName, dataValue) => {
 };
 
 // Reset input on new day
+console.log(getData('startTime', 5));
 let startTime = getData('startTime', 10);
 console.log(startTime, new Date().getDay());
 if (Number(startTime) !== new Date().getDay()) {
@@ -13316,5 +13317,7 @@ shareButton.addEventListener('click', function () {
 // Called on page load
 // Reloads page at midnight
 setTimeout(function () {
+  console.log('reloaded');
   window.location.reload();
 }, getTimeUntilMidnight());
+console.log(getTimeUntilMidnight());
